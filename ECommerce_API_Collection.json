@@ -1,0 +1,221 @@
+{
+  "info": {
+    "name": "E-Commerce API Testing",
+    "_postman_id": "ecommerce-qa-suite-v1",
+    "description": "Complete REST API test collection for E-Commerce Web Application.\nCovers: Auth, Products, Cart, Orders, Payment, Users.\nPrepared by: QA Engineer | Tool: Postman",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://api.ecommerce-app.com", "type": "string" },
+    { "key": "auth_token", "value": "", "type": "string" },
+    { "key": "user_id", "value": "user_001", "type": "string" },
+    { "key": "cart_item_id", "value": "", "type": "string" },
+    { "key": "order_id", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST Login - Valid Credentials",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Token in response', () => { const json = pm.response.json(); pm.expect(json).to.have.property('token'); pm.collectionVariables.set('auth_token', json.token); });",
+            "pm.test('Response time < 500ms', () => pm.expect(pm.response.responseTime).to.be.below(500));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"Test@1234\"\n}" }
+          }
+        },
+        {
+          "name": "POST Login - Invalid Credentials",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 401', () => pm.response.to.have.status(401));",
+            "pm.test('Error message present', () => { const json = pm.response.json(); pm.expect(json.message).to.include('Invalid'); });"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"wrong@example.com\",\n  \"password\": \"wrongpass\"\n}" }
+          }
+        },
+        {
+          "name": "POST Logout",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Session cleared', () => { const json = pm.response.json(); pm.expect(json.message).to.include('logged out'); });"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/logout",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "GET All Products",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Response is array', () => { const json = pm.response.json(); pm.expect(json.products).to.be.an('array'); });",
+            "pm.test('Products have required fields', () => { const p = pm.response.json().products[0]; pm.expect(p).to.have.all.keys('id','name','price','stock'); });"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/products",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }]
+          }
+        },
+        {
+          "name": "GET Product by ID",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Product ID matches', () => { const json = pm.response.json(); pm.expect(json.id).to.eql('prod_001'); });"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/products/prod_001",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }]
+          }
+        },
+        {
+          "name": "GET Search Products",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Results contain search term', () => { const json = pm.response.json(); json.results.forEach(r => pm.expect(r.name.toLowerCase()).to.include('shoe')); });"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/products/search?q=shoe", "query": [{ "key": "q", "value": "shoe" }] },
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "POST Add Item to Cart",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+            "pm.test('Cart item created', () => { const json = pm.response.json(); pm.expect(json).to.have.property('cart_item_id'); pm.collectionVariables.set('cart_item_id', json.cart_item_id); });"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/cart/add",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"product_id\": \"prod_001\",\n  \"quantity\": 2\n}" }
+          }
+        },
+        {
+          "name": "GET Cart Items",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Cart has items', () => { const json = pm.response.json(); pm.expect(json.items).to.be.an('array').that.is.not.empty; });",
+            "pm.test('Total price is number', () => { const json = pm.response.json(); pm.expect(json.total).to.be.a('number'); });"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/cart",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }]
+          }
+        },
+        {
+          "name": "PUT Update Cart Item Quantity",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Quantity updated', () => { const json = pm.response.json(); pm.expect(json.quantity).to.eql(3); });"
+          ]}}],
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/cart/{{cart_item_id}}",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"quantity\": 3\n}" }
+          }
+        },
+        {
+          "name": "DELETE Remove Cart Item",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Item deleted confirmation', () => { const json = pm.response.json(); pm.expect(json.deleted).to.eql(true); });"
+          ]}}],
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/cart/{{cart_item_id}}",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "POST Checkout",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+            "pm.test('Order ID returned', () => { const json = pm.response.json(); pm.expect(json).to.have.property('order_id'); pm.collectionVariables.set('order_id', json.order_id); });",
+            "pm.test('Order status is pending', () => { const json = pm.response.json(); pm.expect(json.status).to.eql('pending'); });"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/orders/checkout",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"shipping_address\": {\n    \"name\": \"Test User\",\n    \"line1\": \"123 Test Street\",\n    \"city\": \"Mumbai\",\n    \"state\": \"Maharashtra\",\n    \"pin\": \"400001\"\n  },\n  \"payment_method\": \"card\"\n}" }
+          }
+        },
+        {
+          "name": "GET Order by ID",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Order has required fields', () => { const o = pm.response.json(); pm.expect(o).to.have.all.keys('order_id','status','items','total','shipping_address'); });"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/orders/{{order_id}}",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "POST Initiate Payment",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Payment URL returned', () => { const json = pm.response.json(); pm.expect(json).to.have.property('payment_url'); pm.expect(json.payment_url).to.include('https://'); });"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/payment/initiate",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"order_id\": \"{{order_id}}\",\n  \"amount\": 1499.00,\n  \"currency\": \"INR\"\n}" }
+          }
+        },
+        {
+          "name": "POST Verify Payment",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "pm.test('Payment verified', () => { const json = pm.response.json(); pm.expect(json.verified).to.eql(true); pm.expect(json.status).to.eql('success'); });"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/payment/verify",
+            "header": [{ "key": "Authorization", "value": "Bearer {{auth_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"payment_id\": \"pay_test_001\",\n  \"order_id\": \"{{order_id}}\",\n  \"signature\": \"test_signature_hash\"\n}" }
+          }
+        }
+      ]
+    }
+  ]
+}

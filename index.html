@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Dashboard | E-Commerce Testing</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="noise"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-icon">QA</div>
+    <div>
+      <div class="brand-name">TestLab</div>
+      <div class="brand-sub">E-Commerce Suite</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <button class="nav-btn active" data-view="overview">
+      <span class="nav-icon">⬡</span> Overview
+    </button>
+    <button class="nav-btn" data-view="testcases">
+      <span class="nav-icon">◻</span> Test Cases
+    </button>
+    <button class="nav-btn" data-view="bugs">
+      <span class="nav-icon">◈</span> Bug Tracker
+    </button>
+    <button class="nav-btn" data-view="api">
+      <span class="nav-icon">⬡</span> API Tests
+    </button>
+    <button class="nav-btn" data-view="coverage">
+      <span class="nav-icon">◻</span> Coverage
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="env-badge">ENV: STAGING</div>
+    <div class="build-info">Build <span class="mono">v2.4.1</span></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="main">
+
+  <!-- ── OVERVIEW ── -->
+  <section class="view active" id="view-overview">
+    <header class="page-header">
+      <div>
+        <div class="page-tag">DASHBOARD</div>
+        <h1>QA Overview</h1>
+        <p class="page-desc">E-Commerce Web Application — Full Testing Report</p>
+      </div>
+      <div class="header-meta">
+        <div class="meta-item"><span>Sprint</span><strong>S-07</strong></div>
+        <div class="meta-item"><span>Cycle</span><strong>RC-3</strong></div>
+        <div class="meta-item"><span>Date</span><strong id="today-date"></strong></div>
+      </div>
+    </header>
+
+    <!-- KPI ROW -->
+    <div class="kpi-row">
+      <div class="kpi-card kpi-total">
+        <div class="kpi-num">128</div>
+        <div class="kpi-label">Total Test Cases</div>
+        <div class="kpi-bar"><div class="kpi-fill" style="width:100%;background:var(--accent)"></div></div>
+      </div>
+      <div class="kpi-card kpi-pass">
+        <div class="kpi-num">118</div>
+        <div class="kpi-label">Passed</div>
+        <div class="kpi-bar"><div class="kpi-fill" style="width:92%;background:var(--green)"></div></div>
+      </div>
+      <div class="kpi-card kpi-fail">
+        <div class="kpi-num">9</div>
+        <div class="kpi-label">Failed</div>
+        <div class="kpi-bar"><div class="kpi-fill" style="width:7%;background:var(--red)"></div></div>
+      </div>
+      <div class="kpi-card kpi-blocked">
+        <div class="kpi-num">1</div>
+        <div class="kpi-label">Blocked</div>
+        <div class="kpi-bar"><div class="kpi-fill" style="width:1%;background:var(--amber)"></div></div>
+      </div>
+      <div class="kpi-card kpi-rate">
+        <div class="kpi-num">92<span class="kpi-pct">%</span></div>
+        <div class="kpi-label">Pass Rate</div>
+        <div class="kpi-bar"><div class="kpi-fill" style="width:92%;background:var(--accent)"></div></div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="charts-row">
+      <div class="card">
+        <div class="card-head">Module Breakdown</div>
+        <div class="module-chart">
+          <div class="module-row" data-pass="89">
+            <div class="mod-name">Login</div>
+            <div class="mod-bar-wrap"><div class="mod-bar" style="--p:89;background:var(--green)"></div></div>
+            <div class="mod-stats"><span class="pass-c">25P</span> <span class="fail-c">2F</span> <span class="block-c">1B</span></div>
+          </div>
+          <div class="module-row" data-pass="94">
+            <div class="mod-name">Cart</div>
+            <div class="mod-bar-wrap"><div class="mod-bar" style="--p:94;background:var(--green)"></div></div>
+            <div class="mod-stats"><span class="pass-c">30P</span> <span class="fail-c">2F</span> <span class="block-c">0B</span></div>
+          </div>
+          <div class="module-row" data-pass="93">
+            <div class="mod-name">Payment</div>
+            <div class="mod-bar-wrap"><div class="mod-bar" style="--p:93;background:var(--amber)"></div></div>
+            <div class="mod-stats"><span class="pass-c">25P</span> <span class="fail-c">2F</span> <span class="block-c">0B</span></div>
+          </div>
+          <div class="module-row" data-pass="96">
+            <div class="mod-name">Checkout</div>
+            <div class="mod-bar-wrap"><div class="mod-bar" style="--p:96;background:var(--green)"></div></div>
+            <div class="mod-stats"><span class="pass-c">22P</span> <span class="fail-c">1F</span> <span class="block-c">0B</span></div>
+          </div>
+          <div class="module-row" data-pass="89">
+            <div class="mod-name">API</div>
+            <div class="mod-bar-wrap"><div class="mod-bar" style="--p:89;background:var(--green)"></div></div>
+            <div class="mod-stats"><span class="pass-c">16P</span> <span class="fail-c">2F</span> <span class="block-c">0B</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">Bug Severity Split</div>
+        <div class="donut-wrap">
+          <svg viewBox="0 0 160 160" class="donut-svg">
+            <circle cx="80" cy="80" r="60" fill="none" stroke="var(--bg3)" stroke-width="20"/>
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#e06b6b" stroke-width="20" stroke-dasharray="28.27 348.5" stroke-dashoffset="-0" class="donut-seg"/>
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#e0a84a" stroke-width="20" stroke-dasharray="94.25 282.74" stroke-dashoffset="-28.27" class="donut-seg"/>
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#5dbe8a" stroke-width="20" stroke-dasharray="188.5 188.5" stroke-dashoffset="-122.52" class="donut-seg"/>
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#6ba0e0" stroke-width="20" stroke-dasharray="66.0 311.0" stroke-dashoffset="-311.0" class="donut-seg"/>
+            <text x="80" y="76" text-anchor="middle" class="donut-center-num">7</text>
+            <text x="80" y="90" text-anchor="middle" class="donut-center-label">BUGS</text>
+          </svg>
+          <div class="donut-legend">
+            <div class="legend-item"><span style="background:#e06b6b"></span>Critical (1)</div>
+            <div class="legend-item"><span style="background:#e0a84a"></span>High (3)</div>
+            <div class="legend-item"><span style="background:#5dbe8a"></span>Medium (2)</div>
+            <div class="legend-item"><span style="background:#6ba0e0"></span>Low (1)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">Testing Types</div>
+        <div class="type-grid">
+          <div class="type-card">
+            <div class="type-icon" style="color:var(--green)">✓</div>
+            <div class="type-name">Functional</div>
+            <div class="type-count">58 TCs</div>
+          </div>
+          <div class="type-card">
+            <div class="type-icon" style="color:var(--accent)">↺</div>
+            <div class="type-name">Regression</div>
+            <div class="type-count">32 TCs</div>
+          </div>
+          <div class="type-card">
+            <div class="type-icon" style="color:var(--blue)">◫</div>
+            <div class="type-name">UI / UX</div>
+            <div class="type-count">22 TCs</div>
+          </div>
+          <div class="type-card">
+            <div class="type-icon" style="color:var(--amber)">⬡</div>
+            <div class="type-name">API</div>
+            <div class="type-count">16 TCs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS USED -->
+    <div class="card tools-card">
+      <div class="card-head">Tools Used</div>
+      <div class="tools-row">
+        <div class="tool-item">
+          <div class="tool-dot" style="background:#1868DB"></div>
+          <div class="tool-info">
+            <div class="tool-name">Jira</div>
+            <div class="tool-desc">Test management & bug tracking</div>
+          </div>
+          <div class="tool-tag">100+ issues logged</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-dot" style="background:#FF6C37"></div>
+          <div class="tool-info">
+            <div class="tool-name">Postman</div>
+            <div class="tool-desc">REST API testing & validation</div>
+          </div>
+          <div class="tool-tag">18 API tests</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-dot" style="background:#4285F4"></div>
+          <div class="tool-info">
+            <div class="tool-name">Chrome DevTools</div>
+            <div class="tool-desc">UI inspection & network analysis</div>
+          </div>
+          <div class="tool-tag">Network + Console</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-dot" style="background:#5dbe8a"></div>
+          <div class="tool-info">
+            <div class="tool-name">Test Case Docs</div>
+            <div class="tool-desc">Structured test case repository</div>
+          </div>
+          <div class="tool-tag">128 documented</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TEST CASES ── -->
+  <section class="view" id="view-testcases">
+    <header class="page-header">
+      <div>
+        <div class="page-tag">TEST CASES</div>
+        <h1>Test Execution</h1>
+      </div>
+      <div class="filter-row">
+        <select id="moduleFilter" onchange="filterTests()">
+          <option value="">All Modules</option>
+          <option value="Login">Login</option>
+          <option value="Cart">Cart</option>
+          <option value="Payment">Payment</option>
+          <option value="Checkout">Checkout</option>
+        </select>
+        <select id="statusFilter" onchange="filterTests()">
+          <option value="">All Status</option>
+          <option value="Pass">Pass</option>
+          <option value="Fail">Fail</option>
+          <option value="Blocked">Blocked</option>
+        </select>
+      </div>
+    </header>
+
+    <div class="card">
+      <table class="data-table" id="testTable">
+        <thead>
+          <tr>
+            <th>TC ID</th>
+            <th>Module</th>
+            <th>Test Scenario</th>
+            <th>Type</th>
+            <th>Priority</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="testBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── BUGS ── -->
+  <section class="view" id="view-bugs">
+    <header class="page-header">
+      <div>
+        <div class="page-tag">DEFECTS</div>
+        <h1>Bug Tracker</h1>
+        <p class="page-desc">Logged via Jira · Linked to test cases</p>
+      </div>
+    </header>
+    <div class="bug-grid" id="bugGrid"></div>
+  </section>
+
+  <!-- ── API ── -->
+  <section class="view" id="view-api">
+    <header class="page-header">
+      <div>
+        <div class="page-tag">API TESTING</div>
+        <h1>Postman Results</h1>
+        <p class="page-desc">REST API endpoints tested via Postman</p>
+      </div>
+    </header>
+
+    <div class="api-summary-row">
+      <div class="api-stat"><div class="api-stat-num">18</div><div>Total</div></div>
+      <div class="api-stat"><div class="api-stat-num" style="color:var(--green)">16</div><div>Passed</div></div>
+      <div class="api-stat"><div class="api-stat-num" style="color:var(--red)">2</div><div>Failed</div></div>
+      <div class="api-stat"><div class="api-stat-num" style="color:var(--accent)">89%</div><div>Pass Rate</div></div>
+    </div>
+
+    <div class="card">
+      <table class="data-table" id="apiTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Expected</th>
+            <th>Actual</th>
+            <th>Response</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="apiBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── COVERAGE ── -->
+  <section class="view" id="view-coverage">
+    <header class="page-header">
+      <div>
+        <div class="page-tag">COVERAGE</div>
+        <h1>Test Coverage</h1>
+      </div>
+    </header>
+    <div class="coverage-grid" id="coverageGrid"></div>
+  </section>
+
+</main>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

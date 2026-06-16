@@ -1,0 +1,32 @@
+TC ID,Module,Test Scenario,Test Type,Priority,Precondition,Test Steps,Expected Result,Actual Result,Status,Tester,Date
+TC-L01,Login,Valid credentials login,Functional,Critical,User registered,1. Open login page 2. Enter valid email 3. Enter valid password 4. Click Login,User redirected to dashboard,Redirected successfully,Pass,QA Engineer,2024-06-01
+TC-L02,Login,Invalid password shows error message,Functional,Critical,User registered,1. Enter valid email 2. Enter wrong password 3. Click Login,Error: Invalid credentials shown,Error shown correctly,Pass,QA Engineer,2024-06-01
+TC-L03,Login,Empty email field validation,Functional,High,Login page open,1. Leave email empty 2. Fill password 3. Click Login,Error: Email is required,Validation triggered,Pass,QA Engineer,2024-06-01
+TC-L04,Login,Empty password field validation,Functional,High,Login page open,1. Fill email 2. Leave password empty 3. Click Login,Error: Password is required,Validation triggered,Pass,QA Engineer,2024-06-01
+TC-L05,Login,SQL injection in email field,Functional,Critical,Login page open,1. Enter ' OR 1=1-- in email 2. Enter any password 3. Click Login,Input sanitized — no DB error or bypass,Input sanitized,Pass,QA Engineer,2024-06-01
+TC-L06,Login,XSS attempt in login form,Functional,Critical,Login page open,1. Enter <script>alert(1)</script> in email 2. Click Login,Script not executed — input escaped,Input escaped,Pass,QA Engineer,2024-06-01
+TC-L07,Login,Brute force — account lock after 5 attempts,Functional,High,User account active,1. Attempt login with wrong password 5 times,Account locked for 15 minutes after 5 failures,Account locked after 5 tries,Pass,QA Engineer,2024-06-01
+TC-L08,Login,Remember Me persists session,Functional,Medium,User on login page,1. Check Remember Me 2. Login 3. Close browser 4. Reopen,Session persists — user still logged in,Session persisted,Pass,QA Engineer,2024-06-01
+TC-L09,Login,Forgot password email sent within 30s,Functional,High,User registered with valid email,1. Click Forgot Password 2. Enter email 3. Check inbox,Reset email received within 30 seconds,Email delayed over 1 minute,Fail,QA Engineer,2024-06-01
+TC-L10,Login,Password reset link expires in 24h,Functional,High,Reset email received,1. Wait 25 hours 2. Click reset link,Link expired — error shown,Link expired correctly,Pass,QA Engineer,2024-06-02
+TC-L11,Login,Logout clears session,Functional,High,User logged in,1. Click Logout,Session cleared — redirected to login,Session cleared,Pass,QA Engineer,2024-06-02
+TC-L12,Login,Login page UI on mobile 375px,UI,Medium,Mobile viewport set,1. Open login on 375px 2. Check layout,All elements visible without overflow,Responsive layout correct,Pass,QA Engineer,2024-06-02
+TC-C01,Cart,Add single item to cart,Functional,Critical,User logged in,1. Go to product page 2. Click Add to Cart,Item appears in cart with correct price,Item added correctly,Pass,QA Engineer,2024-06-03
+TC-C02,Cart,Add duplicate item increments quantity,Functional,High,Item already in cart,1. Add same item again,Quantity incremented by 1,Quantity updated,Pass,QA Engineer,2024-06-03
+TC-C03,Cart,Remove item from cart,Functional,Critical,Item in cart,1. Click Remove on item,Item removed — total recalculates,Item removed correctly,Pass,QA Engineer,2024-06-03
+TC-C04,Cart,Update quantity to 0 removes item,Functional,High,Item in cart,1. Set quantity to 0,Item removed from cart,Item removed,Pass,QA Engineer,2024-06-03
+TC-C05,Cart,Cart total price calculation,Functional,Critical,Multiple items in cart,1. Add 3 items 2. Check total,Total = sum of all items × quantities,Total calculated correctly,Pass,QA Engineer,2024-06-03
+TC-C06,Cart,Apply valid coupon code,Functional,High,Valid coupon available,1. Enter valid coupon 2. Apply,Discount reflected in total,Discount applied,Pass,QA Engineer,2024-06-03
+TC-C07,Cart,Apply expired coupon shows error,Functional,High,Expired coupon known,1. Enter expired coupon 2. Apply,Error: Coupon has expired,No error shown,Fail,QA Engineer,2024-06-03
+TC-C08,Cart,Cart persists after re-login,Functional,Medium,Items in cart,1. Logout 2. Re-login,Cart items still present,Items persisted,Pass,QA Engineer,2024-06-04
+TC-P01,Payment,Valid Visa card payment,Functional,Critical,Items in cart — checkout initiated,1. Enter valid Visa card details 2. Click Pay,Transaction success — order created,Order placed successfully,Pass,QA Engineer,2024-06-05
+TC-P02,Payment,Expired card rejected,Functional,Critical,Items in cart,1. Enter expired card 2. Click Pay,Error: Your card has expired,Error shown,Pass,QA Engineer,2024-06-05
+TC-P03,Payment,Invalid CVV rejected,Functional,Critical,Items in cart,1. Enter invalid 3-digit CVV 2. Click Pay,Error: Invalid security code,Error shown,Pass,QA Engineer,2024-06-05
+TC-P04,Payment,Insufficient funds declined,Functional,High,Items in cart,1. Use test card for insufficient funds,Error: Payment declined,Declined correctly,Pass,QA Engineer,2024-06-05
+TC-P05,Payment,Duplicate transaction blocked,Functional,Critical,Payment in progress,1. Double-click Pay button rapidly,Only one transaction processed — second blocked,Duplicate charge applied,Fail,QA Engineer,2024-06-05
+TC-P06,Payment,Payment timeout rollback,Functional,Critical,Items in cart,1. Initiate payment 2. Simulate timeout,Transaction rolled back — no charge — cart preserved,Rolled back successfully,Pass,QA Engineer,2024-06-05
+TC-CH01,Checkout,Full end-to-end checkout flow,Functional,Critical,User logged in with items in cart,1. Go to checkout 2. Fill address 3. Pay 4. Confirm,Order created — confirmation page shown — email received,Completed end to end,Pass,QA Engineer,2024-06-06
+TC-CH02,Checkout,Valid shipping address accepted,Functional,Critical,Checkout page open,1. Fill all address fields correctly 2. Continue,Address validated — proceed to payment,Address accepted,Pass,QA Engineer,2024-06-06
+TC-CH03,Checkout,Invalid PIN code shows error,Functional,High,Checkout page open,1. Enter 5-digit PIN (invalid) 2. Submit,Error: Enter a valid 6-digit PIN,Error shown correctly,Pass,QA Engineer,2024-06-06
+TC-CH04,Checkout,Order summary matches cart total,Functional,Critical,Items in cart,1. Open checkout 2. Compare order summary with cart,Totals match exactly,Totals matched,Pass,QA Engineer,2024-06-06
+TC-CH05,Checkout,Order confirmation email sent,Functional,High,Order placed successfully,1. Place order 2. Check email inbox,Confirmation email received within 2 minutes,No email received (COD),Blocked,QA Engineer,2024-06-06
